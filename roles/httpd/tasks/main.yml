@@ -7,3 +7,12 @@
   yum:
     name: httpd
     state: latest
+
+- name: Update timezone in php
+  become: yes
+  become_method: sudo
+  become_user: root
+  lineinfile:
+     path: /etc/httpd/conf/httpd.conf 
+     line: "ServerName {{ ansible_host }}"
+     state: present
