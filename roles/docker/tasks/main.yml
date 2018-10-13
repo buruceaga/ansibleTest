@@ -1,0 +1,38 @@
+---
+
+- name: Add docker group
+  group: 
+    name: docker
+    state: preent
+
+- name: Add docker user 
+  become: yes
+  become_method: sudo
+  become_user: root
+  user: 
+    name=docker 
+    groups=docker 
+    append=yes 
+    state=present 
+    createhome=yes
+
+- name: Allow docker sudoer privileges
+  lineinfile:
+    dest: /etc/sudoers
+    state: present
+    regexp: '^%docker'
+    line: '%wheel ALL=(ALL) NOPASSWD: ALL'
+    validate: 'visudo -cf %s'
+
+- name: Set up authorized keys for the docker user
+  authorized_key: user=docker key="{{item}}"
+  with_file:
+    - /home/docker/.ssh/id_rsa.pub
+
+- name : install docker
+  become: yes
+  become_method: sudo
+  become_user: root
+  yum:
+    name: docker
+    state: latest
