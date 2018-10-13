@@ -30,6 +30,40 @@
     line: '%docker ALL=(ALL) NOPASSWD: ALL'
     validate: 'visudo -cf %s'
 
+- name: Create .ssh folder 
+  become: yes
+  become_method: sudo
+  become_user: root
+  file:
+    path: /home/docker/.ssh/
+    owner: docker
+    group: docker
+    mode: 0700 
+    state: directory 
+
+
+- name: Create authorized_key file
+  become: yes
+  become_method: sudo
+  become_user: root
+  file:
+    path: /home/docker/.ssh/authorized_keys
+    state: touch
+    owner: docker
+    group: docker
+    mode: 0600
+
+- name: add docker pub_key to authorized key
+  become: yes
+  become_method: sudo
+  become_user: root
+  authorized_key:
+    user: docker 
+    state: present
+    key: "{{ item  }}"
+  with_file:
+    - id_rsa.pub
+
 - name : install docker
   become: yes
   become_method: sudo
