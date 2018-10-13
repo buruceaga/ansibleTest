@@ -1,0 +1,30 @@
+---
+
+    - name : install php-mysql 
+      become: yes
+      become_method: sudo
+      become_user: root
+      yum:
+        name: php-mysql 
+        state: latest
+
+    - name : install php
+      become: yes
+      become_method: sudo
+      become_user: root
+      yum:
+        name: "{{ item }}"
+        state: absent
+      with_items:
+      - php-cli
+      - php-mysql
+
+    - name: Update timezone in php
+      become: yes
+      become_method: sudo
+      become_user: root
+      lineinfile:
+         path: /etc/php.ini
+         regexp: 'date.timezone ='
+         line: 'date.timezone = Europe\Paris'
+

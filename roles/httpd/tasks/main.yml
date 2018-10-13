@@ -1,0 +1,9 @@
+---
+
+- name : install httpd
+  become: yes
+  become_method: sudo
+  become_user: root
+  yum:
+    name: httpd
+    state: latest

@@ -1,0 +1,9 @@
+---
+
+    - name : install git 
+      become: yes
+      become_method: sudo
+      become_user: root
+      yum:
+        name: git 
+        state: latest
