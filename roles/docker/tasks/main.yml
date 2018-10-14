@@ -71,5 +71,22 @@
   become_method: sudo
   become_user: root
   yum:
-    name: docker
+    name: 
+     - docker
+     - docker-client
+     - docker-client-latest
+     - docker-common
+     - docker-latest
+     - docker-latest-logrotate
+     - docker-logrotate
+     - docker-selinux
     state: latest
+
+- name: Enable and start docker 
+  become: yes
+  service:
+    name: docker 
+    enabled: yes
+    state: started
+  tags:
+    - service
